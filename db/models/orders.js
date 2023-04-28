@@ -76,6 +76,7 @@ const remove = async (id) => {
   const order = await Order.findByIdAndDelete(id);
   return order.id;
 };
+
 const getTotalSales = async (fromDate, toDate) => {
   const startDate = fromDate ? new Date(fromDate) : new Date("2020-01-01");
   const endDate = toDate ? new Date(toDate) : new Date();
@@ -94,6 +95,15 @@ const getTotalSales = async (fromDate, toDate) => {
   return JSON.stringify({ TotalSales: `$${finalTotal}` });
 };
 
+const getByStatus = async (status, fromDate, toDate) => {
+  const startDate = fromDate ? new Date(fromDate) : new Date("2020-01-01");
+  const endDate = toDate ? new Date(toDate) : new Date();
+  const orders = await Order.find({
+    $and: [{ updatedAt: { $gte: startDate, $lte: endDate } }, { status }]
+  }).populate("items.item");
+  return orders;
+};
+
 module.exports = {
   getAll,
   getOne,
@@ -101,5 +111,6 @@ module.exports = {
   update,
   remove,
   getTotalSales,
-  Order
+  Order,
+  getByStatus
 };
