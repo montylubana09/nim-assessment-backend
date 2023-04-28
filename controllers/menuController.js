@@ -28,21 +28,16 @@ const create = async (req, res) => {
   }
 };
 
-const deleteOne = async (req, res) => {
-  try {
-    const menu = await MenuItems.findByIdAndDelete(req.params.id);
-    res.send(menu);
-  } catch (error) {
-    res.status(500).send(error);
-  }
+const deleteOne = async (id) => {
+  const menu = await MenuItems.findByIdAndDelete(id);
+  return menu.id;
 };
 
 const updateOne = async (req, res) => {
   try {
     const { id } = req.params;
     const menu = await MenuItems.updateOne(id, {
-      ...req.body,
-      updatedAt: new Date()
+      ...req.body
     });
     res.send(menu);
   } catch (error) {

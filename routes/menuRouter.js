@@ -8,7 +8,6 @@ const {
   searchOne
 } = require("../controllers/menuController");
 
-
 const menuRouter = Router();
 
 menuRouter.get("/", getAll);

@@ -16,6 +16,10 @@ const menuItemsSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 });
 menuItemsSchema.set("toJSON", {
@@ -64,6 +68,8 @@ const updateOne = async (id, update) => {
     const menuItem = await MenuItems.findByIdAndUpdate(id, update, {
       new: true
     });
+    menuItem.updatedAt = Date.now();
+    menuItem.save();
     return menuItem;
   } catch (error) {
     return error;
@@ -72,14 +78,12 @@ const updateOne = async (id, update) => {
 
 const findOne = async (query) => {
   try {
-    const menuItem = await MenuItems.find(
-      {
-        $or: [
-          { name: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } }
-        ]
-      }
-    );
+    const menuItem = await MenuItems.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } }
+      ]
+    });
     return menuItem;
   } catch (error) {
     return error;
