@@ -28,6 +28,14 @@ const create = async (req, res) => {
   }
 };
 
+const deleteOne = async (req, res) => {
+  try {
+    const menu = await MenuItems.findByIdAndDelete(req.params.id);
+    res.send(menu);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
 const updateOne = async (req, res) => {
   try {
@@ -42,4 +50,4 @@ const updateOne = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create, updateOne };
+module.exports = { getAll, getOne, create, deleteOne, updateOne };
