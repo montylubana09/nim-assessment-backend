@@ -50,5 +50,31 @@ const create = async (body) => {
     return error;
   }
 };
+const findByIdAndDelete = async (body) => {
+  try {
+    const menuItem = await MenuItems.findByIdAndDelete(body);
+    return menuItem;
+  } catch (error) {
+    return error;
+  }
+};
 
-module.exports = { getAll, getOne, create, MenuItems };
+const updateOne = async (id, update) => {
+  try {
+    const menuItem = await MenuItems.findByIdAndUpdate(id, update, {
+      new: true
+    });
+    return menuItem;
+  } catch (error) {
+    return error;
+  }
+};
+
+module.exports = {
+  getAll,
+  getOne,
+  create,
+  findByIdAndDelete,
+  updateOne,
+  MenuItems
+};
