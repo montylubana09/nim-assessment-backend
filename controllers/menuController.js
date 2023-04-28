@@ -50,4 +50,15 @@ const updateOne = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getOne, create, deleteOne, updateOne };
+const searchOne = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    const menu = await MenuItems.findOne(query);
+    res.send(menu);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+module.exports = { getAll, getOne, create, deleteOne, updateOne, searchOne };
