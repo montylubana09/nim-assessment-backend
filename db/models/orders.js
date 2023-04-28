@@ -76,10 +76,22 @@ const remove = async (id) => {
   const order = await Order.findByIdAndDelete(id);
   return order.id;
 };
+const getTotalSales = async (fromDate, toDate) => {
+  const startDate = fromDate ? new Date(fromDate) : new Date("2020-01-01");
+  const endDate = toDate ? new Date(toDate) : new Date();
 
-const getByStatus = async (status) => {
-  const orders = await Order.find({ status }).populate("items");
-  return orders;
+  const orders = await Order.find({
+    updatedAt: { $gte: startDate, $lte: endDate }
+  }).populate("items.item");
+
+  const finalTotal = await orders.reduce((total, order) => {
+    const itemsTotal = order.items.reduce(
+      (total1, item) => total1 + item.item.price * item.quantity,
+      0
+    );
+    return total + itemsTotal;
+  }, 0);
+  return JSON.stringify({ TotalSales: `$${finalTotal}` });
 };
 
 module.exports = {
@@ -88,6 +100,6 @@ module.exports = {
   create,
   update,
   remove,
-  getByStatus,
+  getTotalSales,
   Order
 };
